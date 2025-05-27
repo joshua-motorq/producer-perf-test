@@ -1,0 +1,22 @@
+{
+  "name": "pulsar-producer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "monitor": "top -l 1000 | grep -E 'Cpu|Mem' > monitoring.log & npm run start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pulsar-client": "github:apache/pulsar-client-node",
+    "yaml": "^2.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.19.103",
+    "ts-node": "^10.9.2",
+    "typescript": "^4.9.5"
+  }
+}

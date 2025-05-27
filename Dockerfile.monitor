@@ -1,0 +1,11 @@
+FROM alpine/git:latest
+
+RUN apk add --no-cache docker
+
+RUN apk add --no-cache bash
+
+COPY monitor.sh /app/monitor.sh
+
+RUN chmod +x /app/monitor.sh
+
+ENTRYPOINT ["/app/monitor.sh"]

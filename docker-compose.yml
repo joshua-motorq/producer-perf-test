@@ -1,0 +1,64 @@
+version: "3.8"
+services:
+  producer-1:
+    build: .
+    # depends_on:
+    #   - pulsar
+    environment:
+      - PULSAR_BROKER_URL=pulsar://pulsar:6650
+    # links:
+    #   - pulsar
+    command: 
+      - ts-node-dev
+      - --respawn
+      - --transpile-only
+      - src/keybased.ts
+    volumes:
+      # We had to do npm install /Users/joshua/Projects/pulsar-node-client-update/pulsar-client-node
+      # So we should make node_modules available
+      - /Users/joshua/Projects/pulsar-node-client-update/pulsar-client-node:/usr/src/app/node_modules/pulsar-client-node
+      # it will log into a file called producer.log
+      # we want to have access to it locally at producer-1.log
+      - ./producer-1.log:/usr/src/app/producer-1.log
+
+  producer-2:
+    build: .
+    # depends_on:
+    #   - pulsar
+    environment:
+      - PULSAR_BROKER_URL=pulsar://pulsar:6650
+    # links:
+    #   - pulsar
+    command:
+      - ts-node-dev
+      - --respawn
+      - --transpile-only
+      - src/default.ts
+    volumes:
+      - /Users/joshua/Projects/pulsar-node-client-update/pulsar-client-node:/usr/src/app/node_modules/pulsar-client-node
+
+  monitor:
+    build:
+      context: .
+      dockerfile: Dockerfile.monitor
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./docker_stats.log:/docker_stats.log
+    depends_on:
+      - producer-1
+      - producer-2
+
+  # pulsar:
+  #   image: apachepulsar/pulsar:3.1.0
+  #   ports:
+  #     - "6650:6650"
+  #     - "8080:8080"
+  #   volumes:
+  #     - "pulsardata:/pulsar/data"
+  #     - "pulsarconf:/pulsar/conf"
+  #   command:
+  #     - "bin/pulsar"
+  #     - "standalone"
+volumes:
+  pulsardata:
+  pulsarconf:
