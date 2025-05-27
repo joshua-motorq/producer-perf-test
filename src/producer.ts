@@ -23,7 +23,7 @@ const config = {
     batchSize: 10000, // Number of messages in each batch
     batchTimeout: 10, // Maximum time to wait for a batch in seconds
     maxUniqueKeys: 10000, // Maximum number of unique keys for key-based batching
-    messageRate: 10000, // Target message rate in messages per second
+    messageRate: 30000, // Target message rate in messages per second
     serviceUrl: 'pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651', // Pulsar service URL
     auth_params: 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg',
     topic: 'persistent://joshua-motorq-classic/joshua-classic-namespace/experiment1'
@@ -119,9 +119,7 @@ export async function runProducer(enableKeyBasedBatching: boolean) {
         if (messageCount % config.batchSize === 0) {
             await producer.flush();
 
-            if (messageCount % (config.batchSize * 10 * 10) === 0) { // Log every 100 batches
-                await logMessageCount();
-            }
+            await logMessageCount();
 
             const batchEndTime = Date.now();
             const batchElapsedTime = batchEndTime - batchStartTime;

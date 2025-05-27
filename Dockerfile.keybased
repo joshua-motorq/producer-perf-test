@@ -12,7 +12,7 @@ RUN wget https://archive.apache.org/dist/pulsar/pulsar-client-cpp-3.7.0/deb-arm6
 COPY package*.json ./
 
 # Install dependencies with architecture-specific flags
-RUN npm install 
+RUN npm install
 
 # Copy source files
 COPY config.yaml ./
@@ -29,4 +29,4 @@ RUN npm install
 RUN chmod +x ./app/monitor.sh
 
 # Run the monitoring script in the background
-CMD ts-node-dev --respawn --transpile-only src/index.ts
+CMD ts-node-dev --respawn --transpile-only src/keybased.ts

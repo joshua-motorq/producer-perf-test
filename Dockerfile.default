@@ -1,0 +1,32 @@
+FROM --platform=linux/arm64 node:18-bullseye
+
+WORKDIR /app
+
+# Install build dependencies for native modules
+RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
+RUN wget https://archive.apache.org/dist/pulsar/pulsar-client-cpp-3.7.0/deb-arm64/apache-pulsar-client.deb \
+    && wget https://archive.apache.org/dist/pulsar/pulsar-client-cpp-3.7.0/deb-arm64/apache-pulsar-client-dev.deb \
+    && apt install -y ./apache-pulsar-client*.deb
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies with architecture-specific flags
+RUN npm install
+
+# Copy source files
+COPY config.yaml ./
+COPY tsconfig.json ./
+COPY monitor.sh ./app/monitor.sh
+RUN chmod +x ./app/monitor.sh
+COPY src ./src
+
+# Install dependencies
+RUN npm install -g ts-node-dev
+RUN npm install
+
+# Make the script executable
+RUN chmod +x ./app/monitor.sh
+
+# Run the monitoring script in the background
+CMD ts-node-dev --respawn --transpile-only src/default.ts

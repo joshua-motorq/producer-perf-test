@@ -1,18 +1,13 @@
 version: "3.8"
 services:
   producer-1:
-    build: .
+    image: ghcr.io/joshua-motorq/producer-perf-test:keybased
     # depends_on:
     #   - pulsar
     environment:
       - PULSAR_BROKER_URL=pulsar://pulsar:6650
     # links:
     #   - pulsar
-    command: 
-      - ts-node-dev
-      - --respawn
-      - --transpile-only
-      - src/keybased.ts
     volumes:
       # We had to do npm install /Users/joshua/Projects/pulsar-node-client-update/pulsar-client-node
       # So we should make node_modules available
@@ -22,31 +17,27 @@ services:
       - ./producer-1.log:/usr/src/app/producer-1.log
 
   producer-2:
-    build: .
+    image: ghcr.io/joshua-motorq/producer-perf-test:default
     # depends_on:
     #   - pulsar
     environment:
       - PULSAR_BROKER_URL=pulsar://pulsar:6650
     # links:
     #   - pulsar
-    command:
-      - ts-node-dev
-      - --respawn
-      - --transpile-only
-      - src/default.ts
     volumes:
       - /Users/joshua/Projects/pulsar-node-client-update/pulsar-client-node:/usr/src/app/node_modules/pulsar-client-node
 
   monitor:
-    build:
-      context: .
-      dockerfile: Dockerfile.monitor
+    image: ghcr.io/joshua-motorq/producer-perf-test:monitor
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./docker_stats.log:/docker_stats.log
     depends_on:
       - producer-1
       - producer-2
+    #build:
+    #  context: .
+    #  dockerfile: Dockerfile.monitor
 
   # pulsar:
   #   image: apachepulsar/pulsar:3.1.0
