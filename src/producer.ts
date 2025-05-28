@@ -22,7 +22,7 @@ interface Config {
 
 const config = {
     messageSize: 700, // Size of each message in bytes
-    batchSize: 3000, // Number of messages in each batch
+    batchSize: 1500, // Number of messages in each batch
     batchTimeout: 10, // Maximum time to wait for a batch in seconds
     maxUniqueKeys: 1000, // Maximum number of unique keys for key-based batching
     messageRate: 14300, // Target message rate in messages per second
