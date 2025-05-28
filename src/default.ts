@@ -8,4 +8,5 @@ async function main() {
 
 main().catch(e => {
     console.log('Error: ', e);
+    throw e;
 });

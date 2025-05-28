@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "pulsar-client": "github:apache/pulsar-client-node",
+    "systeminformation": "^5.27.1",
     "yaml": "^2.8.0"
   },
   "devDependencies": {

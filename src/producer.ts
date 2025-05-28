@@ -4,6 +4,8 @@ import { parse } from 'yaml';
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 import { promisify } from 'util';
+import * as si from 'systeminformation';
+import * as os from 'os';
 
 const appendFile = promisify(fs.appendFile);
 
@@ -20,10 +22,10 @@ interface Config {
 
 const config = {
     messageSize: 700, // Size of each message in bytes
-    batchSize: 10000, // Number of messages in each batch
+    batchSize: 1500, // Number of messages in each batch
     batchTimeout: 10, // Maximum time to wait for a batch in seconds
-    maxUniqueKeys: 10000, // Maximum number of unique keys for key-based batching
-    messageRate: 30000, // Target message rate in messages per second
+    maxUniqueKeys: 1000, // Maximum number of unique keys for key-based batching
+    messageRate: 14300, // Target message rate in messages per second
     serviceUrl: 'pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651', // Pulsar service URL
     auth_params: 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg',
     topic: 'persistent://joshua-motorq-classic/joshua-classic-namespace/experiment1'
@@ -46,9 +48,10 @@ async function createProducer(client: Client, enableKeyBasedBatching: boolean): 
             batchingEnabled: true,
             batchingMaxMessages: config.batchSize,
             batchingMaxPublishDelayMs: config.batchTimeout * 1000,
-            blockIfQueueFull: false,
-            maxPendingMessages: config.batchSize + 100000000, 
+            blockIfQueueFull: true,
             batchingType: 'KeyBasedBatching',
+            maxPendingMessages: 10000000000000, // Set a very high limit to avoid blocking
+            maxPendingMessagesAcrossPartitions: 1000000000000000, // Set a very high limit to avoid blocking
         });
     } else {
         return await client.createProducer({
@@ -56,8 +59,10 @@ async function createProducer(client: Client, enableKeyBasedBatching: boolean): 
             batchingEnabled: true,
             batchingMaxMessages: config.batchSize,
             batchingMaxPublishDelayMs: config.batchTimeout * 1000,
-            blockIfQueueFull: false,
-            maxPendingMessages: config.batchSize + 100000000, 
+            blockIfQueueFull: true,
+            batchingType: 'DefaultBatching',
+            maxPendingMessages: 10000000000000, // Set a very high limit to avoid blocking
+            maxPendingMessagesAcrossPartitions: 1000000000000000, // Set a very high limit to avoid blocking
         });
     }
 }
@@ -79,7 +84,7 @@ export async function runProducer(enableKeyBasedBatching: boolean) {
 
     const payload = '{"_ts":1741198400912,"dId":"81164f71-933d-4cd9-bada-800934530f9f","dataSource":"Ford","dtc_events":[],"feed_ver":1741198400912,"id":"2328bc65-e784-4c10-81af-fc8c89e3f961","location":{"lat":75.30460072563241,"lon":120.46989704309152},"meta":{"version":"1.0","timestamp":1741198400912,"status":"active"},"odm_can_mi":8469.49446194708,"speed_can_mph":55.24800420173388,"ts_local":"2025-03-05T18:13:23.431Z","ts_src":"2025-03-05T18:13:23.431Z","ttl":432000,"type":"COMBINEDFEED","types":["LOADTEST","LOADTESTEXTENDED"],"tzId":"America/Chicago","vId":"b7fe0572-8787-4e97-a678-ab43e63ce069"}' + 'A'.repeat(config.messageSize - 585);
 
-    await Promise.resolve(() => { setTimeout(() => {}, 5000); }); // Ensure the producer is ready
+    await Promise.resolve(() => { setTimeout(() => { }, 5000); }); // Ensure the producer is ready
 
     let messageCount = 0;
     const startTime = Date.now();
@@ -98,6 +103,7 @@ export async function runProducer(enableKeyBasedBatching: boolean) {
             await appendFile(logFilePath, `${Date.now()} Message count: ${messageCount}\n`);
         } catch (err) {
             console.error('Failed to write to log file:', err);
+            throw err
         }
     };
 
@@ -116,13 +122,32 @@ export async function runProducer(enableKeyBasedBatching: boolean) {
             partitionKey: key,
             orderingKey: key
         });
-        
+
         messageCount++;
 
         if (messageCount % config.batchSize === 0) {
-            await producer.flush();
+            const netData = await si.networkStats();
+            await producer.flush().catch(err => {
+                console.error('Failed to flush producer:', err);
+                throw err;
+            });
 
             await logMessageCount();
+
+            // const cpuUsage = process.cpuUsage();
+            // const cpus = os.cpus();
+            // let cpuPercent = 0;
+            // if (cpus.length > 0) {
+            //     cpuPercent = cpuUsage.system / (cpus[0].times.sys + cpus[0].times.idle) * 100;
+            // }
+            // const memoryUsage = process.memoryUsage();
+
+            // console.log(`Batch completed: ${messageCount} messages`);
+            // console.log(`CPU Load: ${cpuPercent.toFixed(2)}%`);
+            // console.log(`Memory Usage: ${(memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`);
+            // if (netData && netData.length > 0) {
+            //     console.log(`Network RX: ${(netData[0].rx_bytes / 1024 / 1024).toFixed(2)} MB, TX: ${(netData[0].tx_bytes / 1024 / 1024).toFixed(2)} MB`);
+            // }
 
             const batchEndTime = Date.now();
             const batchElapsedTime = batchEndTime - batchStartTime;
@@ -152,6 +177,7 @@ export async function runProducer(enableKeyBasedBatching: boolean) {
                     console.log(`Batch overrun: expected ${batchInterval}ms, elapsed ${batchElapsedTime}ms, accumulated ${overrunAccumulator}ms`);
                 } catch (err) {
                     console.error('Failed to write to log file:', err);
+                    throw err;
                 }
             }
 
@@ -159,7 +185,17 @@ export async function runProducer(enableKeyBasedBatching: boolean) {
         }
 
         if (messageCount % 1000 === 0) {
-            console.log(`Sent ${messageCount} messages so far`);
+            const netData = await si.networkStats();
+            const cpuUsage = process.cpuUsage();
+            const cpus = os.cpus();
+            const cpuPercent = cpuUsage.system / (cpus[0].times.sys + cpus[0].times.idle) * 100;
+            const memoryUsage = process.memoryUsage();
+
+            console.log(`Sent ${messageCount} messages so far CPU Load: ${cpuPercent.toFixed(2)}%`);
+            console.log(`Memory Usage: ${(memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`);
+            if (netData && netData.length > 0) {
+                console.log(`Network RX: ${(netData[0].rx_bytes / 1024 / 1024).toFixed(2)} MB, TX: ${(netData[0].tx_bytes / 1024 / 1024).toFixed(2)} MB`);
+            }
         }
     }
 
