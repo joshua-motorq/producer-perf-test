@@ -185,15 +185,7 @@ export async function runProducer(enableKeyBasedBatching: boolean) {
         }
 
         if (messageCount % 1000 === 0) {
-            const netData = await si.networkStats();
-            const cpuUsage = process.cpuUsage();
-            const cpus = os.cpus();
-            const cpuPercent = cpuUsage.system / (cpus[0].times.sys + cpus[0].times.idle) * 100;
-            const memoryUsage = process.memoryUsage();
-
-            if (netData && netData.length > 0) {
-                console.log(`Sent ${messageCount} messages so far | CPU Load: ${cpuPercent.toFixed(2)}% | Memory Usage: ${(memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB | Network RX: ${(netData[0].rx_bytes / 1024 / 1024).toFixed(2)} MB, TX: ${(netData[0].tx_bytes / 1024 / 1024).toFixed(2)} MB`);
-            }
+            console.log(`Sent ${messageCount} messages so far`);
         }
     }
 
