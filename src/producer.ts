@@ -22,7 +22,7 @@ interface Config {
 
 const config = {
     messageSize: 700, // Size of each message in bytes
-    batchSize: 1500, // Number of messages in each batch
+    batchSize: 3000, // Number of messages in each batch
     batchTimeout: 10, // Maximum time to wait for a batch in seconds
     maxUniqueKeys: 1000, // Maximum number of unique keys for key-based batching
     messageRate: 14300, // Target message rate in messages per second
@@ -191,10 +191,8 @@ export async function runProducer(enableKeyBasedBatching: boolean) {
             const cpuPercent = cpuUsage.system / (cpus[0].times.sys + cpus[0].times.idle) * 100;
             const memoryUsage = process.memoryUsage();
 
-            console.log(`Sent ${messageCount} messages so far CPU Load: ${cpuPercent.toFixed(2)}%`);
-            console.log(`Memory Usage: ${(memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`);
             if (netData && netData.length > 0) {
-                console.log(`Network RX: ${(netData[0].rx_bytes / 1024 / 1024).toFixed(2)} MB, TX: ${(netData[0].tx_bytes / 1024 / 1024).toFixed(2)} MB`);
+                console.log(`Sent ${messageCount} messages so far | CPU Load: ${cpuPercent.toFixed(2)}% | Memory Usage: ${(memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB | Network RX: ${(netData[0].rx_bytes / 1024 / 1024).toFixed(2)} MB, TX: ${(netData[0].tx_bytes / 1024 / 1024).toFixed(2)} MB`);
             }
         }
     }
