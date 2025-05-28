@@ -1,11 +1,11 @@
-FROM --platform=linux/arm64 node:18-bullseye
+FROM node:18-bullseye
 
 WORKDIR /app
 
 # Install build dependencies for native modules
 RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
-RUN wget https://archive.apache.org/dist/pulsar/pulsar-client-cpp-3.7.0/deb-arm64/apache-pulsar-client.deb \
-    && wget https://archive.apache.org/dist/pulsar/pulsar-client-cpp-3.7.0/deb-arm64/apache-pulsar-client-dev.deb \
+RUN wget https://archive.apache.org/dist/pulsar/pulsar-client-cpp-3.7.0/deb-x86_64/apache-pulsar-client.deb \
+    && wget https://archive.apache.org/dist/pulsar/pulsar-client-cpp-3.7.0/deb-x86_64/apache-pulsar-client-dev.deb \
     && apt install -y ./apache-pulsar-client*.deb
 
 # Copy package files

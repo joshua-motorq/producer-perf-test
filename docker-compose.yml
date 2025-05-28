@@ -32,6 +32,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./docker_stats.log:/docker_stats.log
+      # ./monitor.sh should be inside /app/monitor.sh
+      - ./monitor.sh:/app/monitor.sh
     depends_on:
       - producer-1
       - producer-2

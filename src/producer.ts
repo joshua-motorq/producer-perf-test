@@ -103,11 +103,14 @@ export async function runProducer(enableKeyBasedBatching: boolean) {
 
     let batchStartTime = Date.now();
     let overrunAccumulator = 0;
+    let keyIndexCounter = 0; // Initialize counter for round-robin key selection
 
     while (running) {
-        const hash = crypto.createHash('sha256').update(Math.random().toString()).digest('hex');
-        const keyIndex = parseInt(hash, 16) % config.maxUniqueKeys;
+        // Use round-robin key selection
+        const keyIndex = keyIndexCounter % config.maxUniqueKeys;
         const key = keyIndex.toString();
+        keyIndexCounter++; // Increment the counter for the next message
+
         producer.send({
             data: Buffer.from(payload),
             partitionKey: key,
