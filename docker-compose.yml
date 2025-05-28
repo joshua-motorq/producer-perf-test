@@ -1,7 +1,10 @@
 version: "3.8"
 services:
   producer-1:
-    image: ghcr.io/joshua-motorq/producer-perf-test:keybased
+    #image: ghcr.io/joshua-motorq/producer-perf-test:keybased
+    build:
+      context: .
+      dockerfile: Dockerfile.keybased
     # depends_on:
     #   - pulsar
     environment:
@@ -17,7 +20,10 @@ services:
       - ./producer-1.log:/usr/src/app/producer-1.log
 
   producer-2:
-    image: ghcr.io/joshua-motorq/producer-perf-test:default
+    #image: ghcr.io/joshua-motorq/producer-perf-test:default
+    build:
+      context: .
+      dockerfile: Dockerfile.default
     # depends_on:
     #   - pulsar
     environment:
@@ -28,7 +34,10 @@ services:
       - /Users/joshua/Projects/pulsar-node-client-update/pulsar-client-node:/usr/src/app/node_modules/pulsar-client-node
 
   monitor:
-    image: ghcr.io/joshua-motorq/producer-perf-test:monitor
+    #image: ghcr.io/joshua-motorq/producer-perf-test:monitor
+    build:
+      context: .
+      dockerfile: Dockerfile.monitor
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./docker_stats.log:/docker_stats.log
