@@ -11,7 +11,7 @@ while true; do
   while IFS= read -r line; do
     echo "$(date +'%Y-%m-%d %H:%M:%S') $line" >> docker_stats.log
     log_count=$((log_count + 1))
-  done < <(docker stats --no-stream --no-trunc --format \
+  done < <(sudo docker stats --no-stream --no-trunc --format \
     '{{.Name}} CPU={{.CPUPerc}} MEM={{.MemUsage}} NET={{.NetIO}}' \
   | tr -cd '\11\12\15\40-\176')
 
