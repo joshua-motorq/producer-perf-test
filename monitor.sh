@@ -1,4 +1,5 @@
 #!/bin/bash
+PATH=$PATH:/usr/local/bin
 while true; do
   docker stats --no-stream --no-trunc --format \
     '{{.Name}} CPU={{.CPUPerc}} MEM={{.MemUsage}} NET={{.NetIO}}' \

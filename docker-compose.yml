@@ -1,66 +1,322 @@
 version: "3.8"
 services:
-  producer-1:
+  producer-6mbps-1000keys-keybased:
     #image: ghcr.io/joshua-motorq/producer-perf-test:keybased
     build:
       context: .
       dockerfile: Dockerfile.keybased
-    # depends_on:
-    #   - pulsar
     environment:
       - PULSAR_BROKER_URL=pulsar://pulsar:6650
-    # links:
-    #   - pulsar
+      - MESSAGE_SIZE=700
+      - BATCH_SIZE=1500
+      - BATCH_TIMEOUT=10
+      - MAX_UNIQUE_KEYS=1000
+      - MESSAGE_RATE=8571
+      - SERVICE_URL=pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651
+      - AUTH_PARAMS=eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg
+      - TOPIC=persistent://joshua-motorq-classic/joshua-classic-namespace/experiment1
     volumes:
-      # We had to do npm install /Users/joshua/Projects/pulsar-node-client-update/pulsar-client-node
-      # So we should make node_modules available
-      - /Users/joshua/Projects/pulsar-node-client-update/pulsar-client-node:/usr/src/app/node_modules/pulsar-client-node
-      # it will log into a file called producer.log
-      # we want to have access to it locally at producer-1.log
       - ./producer-1.log:/usr/src/app/producer-1.log
 
-  producer-2:
+  producer-6mbps-1000keys-default:
     #image: ghcr.io/joshua-motorq/producer-perf-test:default
     build:
       context: .
       dockerfile: Dockerfile.default
-    # depends_on:
-    #   - pulsar
     environment:
       - PULSAR_BROKER_URL=pulsar://pulsar:6650
-    # links:
-    #   - pulsar
+      - MESSAGE_SIZE=700
+      - BATCH_SIZE=1500
+      - BATCH_TIMEOUT=10
+      - MAX_UNIQUE_KEYS=1000
+      - MESSAGE_RATE=8571
+      - SERVICE_URL=pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651
+      - AUTH_PARAMS=eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg
+      - TOPIC=persistent://joshua-motorq-classic/joshua-classic-namespace/experiment1
     volumes:
       - /Users/joshua/Projects/pulsar-node-client-update/pulsar-client-node:/usr/src/app/node_modules/pulsar-client-node
-
-  monitor:
-    #image: ghcr.io/joshua-motorq/producer-perf-test:monitor
+  producer-6mbps-500keys-keybased:
+    #image: ghcr.io/joshua-motorq/producer-perf-test:keybased
     build:
       context: .
-      dockerfile: Dockerfile.monitor
+      dockerfile: Dockerfile.keybased
+    environment:
+      - PULSAR_BROKER_URL=pulsar://pulsar:6650
+      - MESSAGE_SIZE=700
+      - BATCH_SIZE=1500
+      - BATCH_TIMEOUT=10
+      - MAX_UNIQUE_KEYS=500
+      - MESSAGE_RATE=8571
+      - SERVICE_URL=pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651
+      - AUTH_PARAMS=eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg
+      - TOPIC=persistent://joshua-motorq-classic/joshua-classic-namespace/experiment2
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./docker_stats.log:/docker_stats.log
-      # ./monitor.sh should be inside /app/monitor.sh
-      - ./monitor.sh:/app/monitor.sh
-    depends_on:
-      - producer-1
-      - producer-2
-    #build:
-    #  context: .
-    #  dockerfile: Dockerfile.monitor
+      - ./producer-1.log:/usr/src/app/producer-1.log
 
-  # pulsar:
-  #   image: apachepulsar/pulsar:3.1.0
-  #   ports:
-  #     - "6650:6650"
-  #     - "8080:8080"
-  #   volumes:
-  #     - "pulsardata:/pulsar/data"
-  #     - "pulsarconf:/pulsar/conf"
-  #   command:
-  #     - "bin/pulsar"
-  #     - "standalone"
-volumes:
-  pulsardata:
-  pulsarconf:
+  producer-6mbps-500keys-default:
+    #image: ghcr.io/joshua-motorq/producer-perf-test:default
+    build:
+      context: .
+      dockerfile: Dockerfile.default
+    environment:
+      - PULSAR_BROKER_URL=pulsar://pulsar:6650
+      - MESSAGE_SIZE=700
+      - BATCH_SIZE=1500
+      - BATCH_TIMEOUT=10
+      - MAX_UNIQUE_KEYS=500
+      - MESSAGE_RATE=8571
+      - SERVICE_URL=pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651
+      - AUTH_PARAMS=eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg
+      - TOPIC=persistent://joshua-motorq-classic/joshua-classic-namespace/experiment2
+    volumes:
+      - /Users/joshua/Projects/pulsar-node-client-update/pulsar-client-node:/usr/src/app/node_modules/pulsar-client-node
+  
+  producer-6mbps-100keys-keybased:
+    #image: ghcr.io/joshua-motorq/producer-perf-test:keybased
+    build:
+      context: .
+      dockerfile: Dockerfile.keybased
+    environment:
+      - PULSAR_BROKER_URL=pulsar://pulsar:6650
+      - MESSAGE_SIZE=700
+      - BATCH_SIZE=1500
+      - BATCH_TIMEOUT=10
+      - MAX_UNIQUE_KEYS=100
+      - MESSAGE_RATE=8571
+      - SERVICE_URL=pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651
+      - AUTH_PARAMS=eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg
+      - TOPIC=persistent://joshua-motorq-classic/joshua-classic-namespace/experiment3
+    volumes:
+      - ./producer-1.log:/usr/src/app/producer-1.log
+
+  producer-6mbps-100keys-default:
+    #image: ghcr.io/joshua-motorq/producer-perf-test:default
+    build:
+      context: .
+      dockerfile: Dockerfile.default
+    environment:
+      - PULSAR_BROKER_URL=pulsar://pulsar:6650
+      - MESSAGE_SIZE=700
+      - BATCH_SIZE=1500
+      - BATCH_TIMEOUT=10
+      - MAX_UNIQUE_KEYS=100
+      - MESSAGE_RATE=8571
+      - SERVICE_URL=pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651
+      - AUTH_PARAMS=eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg
+      - TOPIC=persistent://joshua-motorq-classic/joshua-classic-namespace/experiment3
+    volumes:
+      - /Users/joshua/Projects/pulsar-node-client-update/pulsar-client-node:/usr/src/app/node_modules/pulsar-client-node
+  
+  producer-4mbps-1000keys-keybased:
+    #image: ghcr.io/joshua-motorq/producer-perf-test:keybased
+    build:
+      context: .
+      dockerfile: Dockerfile.keybased
+    environment:
+      - PULSAR_BROKER_URL=pulsar://pulsar:6650
+      - MESSAGE_SIZE=700
+      - BATCH_SIZE=1500
+      - BATCH_TIMEOUT=10
+      - MAX_UNIQUE_KEYS=1000
+      - MESSAGE_RATE=5715
+      - SERVICE_URL=pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651
+      - AUTH_PARAMS=eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg
+      - TOPIC=persistent://joshua-motorq-classic/joshua-classic-namespace/experiment4
+    volumes:
+      - ./producer-1.log:/usr/src/app/producer-1.log
+
+  producer-4mbps-1000keys-default:
+    #image: ghcr.io/joshua-motorq/producer-perf-test:default
+    build:
+      context: .
+      dockerfile: Dockerfile.default
+    environment:
+      - PULSAR_BROKER_URL=pulsar://pulsar:6650
+      - MESSAGE_SIZE=700
+      - BATCH_SIZE=1500
+      - BATCH_TIMEOUT=10
+      - MAX_UNIQUE_KEYS=1000
+      - MESSAGE_RATE=5715
+      - SERVICE_URL=pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651
+      - AUTH_PARAMS=eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg
+      - TOPIC=persistent://joshua-motorq-classic/joshua-classic-namespace/experiment4
+    volumes:
+      - /Users/joshua/Projects/pulsar-node-client-update/pulsar-client-node:/usr/src/app/node_modules/pulsar-client-node
+  producer-4mbps-500keys-keybased:
+    #image: ghcr.io/joshua-motorq/producer-perf-test:keybased
+    build:
+      context: .
+      dockerfile: Dockerfile.keybased
+    environment:
+      - PULSAR_BROKER_URL=pulsar://pulsar:6650
+      - MESSAGE_SIZE=700
+      - BATCH_SIZE=1500
+      - BATCH_TIMEOUT=10
+      - MAX_UNIQUE_KEYS=500
+      - MESSAGE_RATE=5715
+      - SERVICE_URL=pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651
+      - AUTH_PARAMS=eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg
+      - TOPIC=persistent://joshua-motorq-classic/joshua-classic-namespace/experiment5
+    volumes:
+      - ./producer-1.log:/usr/src/app/producer-1.log
+
+  producer-4mbps-500keys-default:
+    #image: ghcr.io/joshua-motorq/producer-perf-test:default
+    build:
+      context: .
+      dockerfile: Dockerfile.default
+    environment:
+      - PULSAR_BROKER_URL=pulsar://pulsar:6650
+      - MESSAGE_SIZE=700
+      - BATCH_SIZE=1500
+      - BATCH_TIMEOUT=10
+      - MAX_UNIQUE_KEYS=500
+      - MESSAGE_RATE=5715
+      - SERVICE_URL=pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651
+      - AUTH_PARAMS=eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg
+      - TOPIC=persistent://joshua-motorq-classic/joshua-classic-namespace/experiment5
+    volumes:
+      - /Users/joshua/Projects/pulsar-node-client-update/pulsar-client-node:/usr/src/app/node_modules/pulsar-client-node
+  
+  producer-4mbps-100keys-keybased:
+    #image: ghcr.io/joshua-motorq/producer-perf-test:keybased
+    build:
+      context: .
+      dockerfile: Dockerfile.keybased
+    environment:
+      - PULSAR_BROKER_URL=pulsar://pulsar:6650
+      - MESSAGE_SIZE=700
+      - BATCH_SIZE=1500
+      - BATCH_TIMEOUT=10
+      - MAX_UNIQUE_KEYS=100
+      - MESSAGE_RATE=5715
+      - SERVICE_URL=pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651
+      - AUTH_PARAMS=eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg
+      - TOPIC=persistent://joshua-motorq-classic/joshua-classic-namespace/experiment6
+    volumes:
+      - ./producer-1.log:/usr/src/app/producer-1.log
+
+  producer-4mbps-100keys-default:
+    #image: ghcr.io/joshua-motorq/producer-perf-test:default
+    build:
+      context: .
+      dockerfile: Dockerfile.default
+    environment:
+      - PULSAR_BROKER_URL=pulsar://pulsar:6650
+      - MESSAGE_SIZE=700
+      - BATCH_SIZE=1500
+      - BATCH_TIMEOUT=10
+      - MAX_UNIQUE_KEYS=100
+      - MESSAGE_RATE=5715
+      - SERVICE_URL=pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651
+      - AUTH_PARAMS=eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg
+      - TOPIC=persistent://joshua-motorq-classic/joshua-classic-namespace/experiment6
+    volumes:
+      - /Users/joshua/Projects/pulsar-node-client-update/pulsar-client-node:/usr/src/app/node_modules/pulsar-client-node
+  
+  producer-2mbps-1000keys-keybased:
+    #image: ghcr.io/joshua-motorq/producer-perf-test:keybased
+    build:
+      context: .
+      dockerfile: Dockerfile.keybased
+    environment:
+      - PULSAR_BROKER_URL=pulsar://pulsar:6650
+      - MESSAGE_SIZE=700
+      - BATCH_SIZE=1500
+      - BATCH_TIMEOUT=10
+      - MAX_UNIQUE_KEYS=1000
+      - MESSAGE_RATE=2858
+      - SERVICE_URL=pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651
+      - AUTH_PARAMS=eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg
+      - TOPIC=persistent://joshua-motorq-classic/joshua-classic-namespace/experiment7
+    volumes:
+      - ./producer-1.log:/usr/src/app/producer-1.log
+
+  producer-2mbps-1000keys-default:
+    #image: ghcr.io/joshua-motorq/producer-perf-test:default
+    build:
+      context: .
+      dockerfile: Dockerfile.default
+    environment:
+      - PULSAR_BROKER_URL=pulsar://pulsar:6650
+      - MESSAGE_SIZE=700
+      - BATCH_SIZE=1500
+      - BATCH_TIMEOUT=10
+      - MAX_UNIQUE_KEYS=1000
+      - MESSAGE_RATE=2858
+      - SERVICE_URL=pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651
+      - AUTH_PARAMS=eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg
+      - TOPIC=persistent://joshua-motorq-classic/joshua-classic-namespace/experiment7
+    volumes:
+      - /Users/joshua/Projects/pulsar-node-client-update/pulsar-client-node:/usr/src/app/node_modules/pulsar-client-node
+  producer-2mbps-500keys-keybased:
+    #image: ghcr.io/joshua-motorq/producer-perf-test:keybased
+    build:
+      context: .
+      dockerfile: Dockerfile.keybased
+    environment:
+      - PULSAR_BROKER_URL=pulsar://pulsar:6650
+      - MESSAGE_SIZE=700
+      - BATCH_SIZE=1500
+      - BATCH_TIMEOUT=10
+      - MAX_UNIQUE_KEYS=500
+      - MESSAGE_RATE=2858
+      - SERVICE_URL=pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651
+      - AUTH_PARAMS=eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg
+      - TOPIC=persistent://joshua-motorq-classic/joshua-classic-namespace/experiment8
+    volumes:
+      - ./producer-1.log:/usr/src/app/producer-1.log
+
+  producer-2mbps-500keys-default:
+    #image: ghcr.io/joshua-motorq/producer-perf-test:default
+    build:
+      context: .
+      dockerfile: Dockerfile.default
+    environment:
+      - PULSAR_BROKER_URL=pulsar://pulsar:6650
+      - MESSAGE_SIZE=700
+      - BATCH_SIZE=1500
+      - BATCH_TIMEOUT=10
+      - MAX_UNIQUE_KEYS=500
+      - MESSAGE_RATE=2858
+      - SERVICE_URL=pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651
+      - AUTH_PARAMS=eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg
+      - TOPIC=persistent://joshua-motorq-classic/joshua-classic-namespace/experiment8
+    volumes:
+      - /Users/joshua/Projects/pulsar-node-client-update/pulsar-client-node:/usr/src/app/node_modules/pulsar-client-node
+  
+  producer-2mbps-100keys-keybased:
+    #image: ghcr.io/joshua-motorq/producer-perf-test:keybased
+    build:
+      context: .
+      dockerfile: Dockerfile.keybased
+    environment:
+      - PULSAR_BROKER_URL=pulsar://pulsar:6650
+      - MESSAGE_SIZE=700
+      - BATCH_SIZE=1500
+      - BATCH_TIMEOUT=10
+      - MAX_UNIQUE_KEYS=100
+      - MESSAGE_RATE=2858
+      - SERVICE_URL=pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651
+      - AUTH_PARAMS=eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg
+      - TOPIC=persistent://joshua-motorq-classic/joshua-classic-namespace/experiment9
+    volumes:
+      - ./producer-1.log:/usr/src/app/producer-1.log
+
+  producer-2mbps-100keys-default:
+    #image: ghcr.io/joshua-motorq/producer-perf-test:default
+    build:
+      context: .
+      dockerfile: Dockerfile.default
+    environment:
+      - PULSAR_BROKER_URL=pulsar://pulsar:6650
+      - MESSAGE_SIZE=700
+      - BATCH_SIZE=1500
+      - BATCH_TIMEOUT=10
+      - MAX_UNIQUE_KEYS=100
+      - MESSAGE_RATE=2858
+      - SERVICE_URL=pulsar+ssl://pc-276beb96.azure-eastus-test-w5d89.azure.snio.cloud:6651
+      - AUTH_PARAMS=eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwMjFkM2YzLWU0OTQtNTY0OC04YmI1LTcxZDg3OGMzNDM4MyIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidXJuOnNuOnB1bHNhcjpvLTh6aTV0OmRldnRlc3QtY2xhc3NpYyJdLCJleHAiOjE3NTA5MjY4MTIsImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3Njb3BlIjpbImFkbWluIiwiYWNjZXNzIl0sImh0dHBzOi8vc3RyZWFtbmF0aXZlLmlvL3VzZXJuYW1lIjoic2hhc2hhbmstc2VydmljZS1hY2NvdW50QG8tOHppNXQuYXV0aC5zdHJlYW1uYXRpdmUuY2xvdWQiLCJpYXQiOjE3NDgzMzQ4MTUsImlzcyI6Imh0dHBzOi8vcGMtMjc2YmViOTYuYXp1cmUtZWFzdHVzLXRlc3QtdzVkODkuYXp1cmUuc25pby5jbG91ZC9hcGlrZXlzLyIsImp0aSI6IjA3NTZiNWUyMjg1OTQwOGJiZThjZTM2YjM1MmQwYzE3IiwicGVybWlzc2lvbnMiOltdLCJzdWIiOiJ6MG1ZdHFjTkd4V1RpZTFMMXNBQXFGOG1xdE9UMldlYkBjbGllbnRzIn0.LyqbiWBZ9vK0jeMqtuZsJOx4NFol9W6jXuq0D5O_LHtb7309NDcn-nYkzDBFF-Fa-H8vjrPTC2m4N7LxNbtZsTbx_0uP69Ntgb8rcIhl0cdjmtp9QJCE2Yvkz51kW8DPPoQUfGh98gG0ChDuTbsaqHggtAMuKhGqQWWIET4hg8Nl-JSdNawm6w0Qk9eG8Py-yilS6bsckwlQ5LHUuLf5VfwxlvLyCwuaybTHt93l2fxzQTIZysVMJLC8KfIYpvxycSgiqH6LxA-cJzlb_VsLVjA_288IGSPLLSa4OlA6pVjlocgvhUikqDSLpB29PiGqtl0sBn93_WhtfU-MHM2VFg
+      - TOPIC=persistent://joshua-motorq-classic/joshua-classic-namespace/experiment9
+    volumes:
+      - /Users/joshua/Projects/pulsar-node-client-update/pulsar-client-node:/usr/src/app/node_modules/pulsar-client-node

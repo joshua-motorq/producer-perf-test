@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.5.0",
     "pulsar-client": "github:apache/pulsar-client-node",
     "systeminformation": "^5.27.1",
     "yaml": "^2.8.0"
